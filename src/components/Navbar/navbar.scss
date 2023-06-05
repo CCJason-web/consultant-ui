@@ -1,0 +1,55 @@
+$primary-color: #007bff;
+$navbar-background: grey;
+$navbar-height: 30px;
+
+@mixin navbar-link {
+    display: inline-block;
+    padding: 10px;
+    color: $primary-color;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .navbar {
+    background-color: $navbar-background;
+    height: $navbar-height;
+  }
+  
+  .navbar-brand {
+    font-size: 18px;
+    font-weight: bold;
+    color: $primary-color;
+  }
+  
+  .navbar-links {
+    list-style: none;
+    margin: 0;
+    padding: 5px;
+    text-decoration: none;
+    li {
+      display: inline-block;
+      margin-left: 10px;
+      &:first-child {
+        margin-left: 0;
+      }
+      a {
+        @include navbar-link;
+      }
+    }
+  }
+
+  .navbar-buttons {
+    /* ...other styles */
+    margin-right: 10px;
+    float: right;
+    padding: 5px;
+  }
+
+  .navbar-button {
+    /* ...other styles */
+    padding: 5px;
+    text-decoration: none;
+  }
+  
