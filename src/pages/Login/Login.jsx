@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import './Login.scss';
@@ -7,10 +8,20 @@ const LoginPopup = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    // Perform login logic here
-    // You can access the form data in the state variables (username, password)
-    // Validate the form data, make API calls, etc.
+  const handleLogin = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await axios.post('/consultant/v1/api/signup', {
+        username,
+        password
+      });
+
+      // Handle the response or perform any necessary actions
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
