@@ -3,6 +3,7 @@ import './Signup.scss';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import axios from 'axios';
+import CountdownTimer from './CountdownTimer';
 
 const Signup = () => {
   const [username, setUsername] = useState('');
@@ -19,9 +20,12 @@ const Signup = () => {
   const handleSignup = async (event) => {
     event.preventDefault();
 
-    fieldsValidation();
+    let isStop = fieldsValidation()
+    if (isStop) {
+      return;
+    }
 
-    if(!email) {
+    if (!email) {
       setEmailValidation(false);
       return;
     }
@@ -44,54 +48,33 @@ const Signup = () => {
 
 
   const fieldsValidation = () => {
-    let isReturn = false;
-    if(password != confirmPassword) {
+    let isStop = false;
+    if (password != confirmPassword) {
       setPasswordMatch(false);
-      isReturn = true;
+      isStop = true;
     }
 
-    if(!username) {
+    if (!username) {
       setUsernameValidation(false);
-      isReturn = true;
+      isStop = true;
     }
 
-    if(!password) {
+    if (!password) {
       setPasswordValidation(false);
-      isReturn = true;
+      isStop = true;
     }
 
-    if(!email) {
+    if (!email) {
       setEmailValidation(false);
-      isReturn = true;
+      isStop = true;
     }
 
-    if(!verificationCode) {
-      setVerificationValidation(false);
-      isReturn = true;
-    }
+    return isStop;
 
-    if(isReturn){
-      return;
-    }
-
-  }  
-
-  const handleSendEmail = async (event) => {
-    event.preventDefault();
-
-    try {
-      const response = await axios.post('/consultant/v1/api/emailVerification', {
-        email
-      });
-
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  }
 
   const handleConfirmPasswordValidation = () => {
-    if(password != confirmPassword) {
+    if (password != confirmPassword) {
       setPasswordMatch(false)
     } else {
       setPasswordMatch(true)
@@ -99,12 +82,16 @@ const Signup = () => {
   }
 
   const handleEmailValidation = () => {
-    if(email) {
+    if (email) {
       setEmailValidation(true)
     } else {
       setEmailValidation(false)
     }
   }
+
+  const handleTimerExpired = () => {
+    console.log("timeout")
+  };
 
   return (
     <div>
@@ -157,7 +144,8 @@ const Signup = () => {
               />
             </div>
             {!emailValidation && <p className='validation-alarm'>email can not be null</p>}
-            <button onClick={handleSendEmail} >Send email</button>
+            {/* <button onClick={handleSendEmail} >Send email</button> */}
+            <CountdownTimer onTimerExpired={handleTimerExpired} fieldsValidation={fieldsValidation} email={email} />
             <div>
               <label htmlFor="verificationCode">Verify:</label>
               <input
@@ -165,7 +153,7 @@ const Signup = () => {
                 id="verificationCode"
                 value={verificationCode}
                 onChange={(e) => setVerificationCode(e.target.value)}
-                onBlur={() => {verificationCode ? setVerificationValidation(true) : setVerificationValidation(false)}}
+                onBlur={() => { verificationCode ? setVerificationValidation(true) : setVerificationValidation(false) }}
               />
             </div>
             {!verificationValidation && <p className='validation-alarm'>verificationCode can not be null</p>}
